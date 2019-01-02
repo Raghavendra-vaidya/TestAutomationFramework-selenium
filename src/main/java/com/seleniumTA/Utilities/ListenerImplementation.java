@@ -23,7 +23,7 @@ public class ListenerImplementation implements ITestListener  {
 	@Override
 	public void onTestFailure(ITestResult result) 
 	{
-		Utility.captureScreenshot(Base.driver, result);
+		Utility.robotScreenShot(result);
 		
 	}
 

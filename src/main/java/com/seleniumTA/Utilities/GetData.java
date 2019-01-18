@@ -2,6 +2,9 @@ package com.seleniumTA.Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,6 +18,7 @@ public class GetData
 {
 	static File fl;
 	static FileInputStream fis;
+	static HashMap<String, String> elementMap;
 	
 	public static String fromExcel(String fileName, String sheetName, int rIndex, int cIndex) 
 	{
@@ -36,6 +40,62 @@ public class GetData
 			e.printStackTrace();
 		}
 		return data;
+	}
+	
+	public static List<String> getEntireRowData(String filePath, String sheetName, int rIndex ) 
+	{
+		
+		String data = null;
+		fl = new File(filePath);
+		ArrayList<String> ar = new ArrayList<String>() ;		
+		try
+		{
+			fis=  new FileInputStream(fl);
+			Workbook wb =WorkbookFactory.create(fis);
+			Sheet st= wb.getSheet(sheetName);
+			Row rw =st.getRow(rIndex);			
+			for(Cell c: rw) 
+			{
+				 data = c.getStringCellValue();
+				ar.add(data);
+			}
+			
+			return ar;	
+		}
+		
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return ar;
+	}
+	public static HashMap<String, String> getDataMap(String filePath, String sheetName, int startRow ) 
+	{
+		elementMap = new HashMap<String, String>();
+		/*String data = null;*/
+		fl = new File(filePath);
+				
+		try
+		{
+			fis=  new FileInputStream(fl);
+			Workbook wb =WorkbookFactory.create(fis);
+			Sheet st= wb.getSheet(sheetName);
+			for (int i = startRow; i <= st.getLastRowNum(); i++)
+			{
+				Row rw = st.getRow(i);
+				String ename = rw.getCell(0).getStringCellValue();
+				String path = rw.getCell(1).getStringCellValue();
+				elementMap.put(ename, path);
+			
+			}		
+			
+		}
+		
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
+		return elementMap;
 	}
 	
 	public static String fromProperties(String fileName, String key) {
